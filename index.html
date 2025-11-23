@@ -125,7 +125,7 @@ html,body{cursor:none}
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxKYBEmDq3d5yaT8XC-iLfN86juLw_w0lcvXIM1goOT0gxOSki8DHcOO8VjoEitkm9H/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbx9sJWT4WlUqiisTCE-D9H_qhZLEP5R9XZp7eWWbuaeaZVh6i1ZuIbCKAPSJJwN-7Mi/exec";
 
 // util
 function el(tag,cls){const d=document.createElement(tag);if(cls)d.className=cls;return d;}
@@ -149,8 +149,10 @@ document.addEventListener("mousemove",e=>{cursor.style.top=e.clientY+"px";cursor
 
 // carregar dados
 function carregarDados(){
-  if(!API_URL || API_URL.indexOf("COLE_AQUI")!==-1){console.warn("API não configurada.");return;}
-  fetch(API_URL).then(r=>r.json()).then(json=>{GLOBAL_DATA=json;renderPastas(GLOBAL_DATA);}).catch(err=>console.error("Falha ao carregar API:",err));
+  fetch(API_URL)
+    .then(r=>r.json())
+    .then(json=>{GLOBAL_DATA=json;renderPastas(json);})
+    .catch(err=>console.error("Erro ao carregar API",err));
 }
 
 // render pastas
@@ -158,9 +160,10 @@ function renderPastas(list){
   grid.innerHTML="";
   list.forEach(inst=>{
     const card=el('div','pasta');
-    card.innerHTML=`<img src="https://cdn-icons-png.flaticon.com/512/716/716784.png" alt="pasta">
-                    <h3>${escapeHtml(inst.instrutor)}</h3>
-                    <div style="font-size:12px;color:#cfd9ff">${inst.items.length} prints</div>`;
+    card.innerHTML=`
+      <img src="https://cdn-icons-png.flaticon.com/512/716/716784.png">
+      <h3>${escapeHtml(inst.instrutor)}</h3>
+      <div style="font-size:12px;color:#cfd9ff">${inst.items.length} prints</div>`;
     card.onclick=()=>abrirInstrutor(inst.instrutor);
     grid.appendChild(card);
   });
@@ -168,45 +171,59 @@ function renderPastas(list){
 
 // abrir instrutor
 function abrirInstrutor(nome){
-  const inst=GLOBAL_DATA.find(i=>(i.instrutor||"")===nome);
-  if(!inst) return alert("Instrutor não encontrado");
-  emptyMsg.style.display="none"; viewArea.style.display="block";
+  const inst=GLOBAL_DATA.find(i=>i.instrutor===nome);
+  if(!inst) return;
 
+  emptyMsg.style.display="none";
+  viewArea.style.display="block";
   listaPrints.innerHTML="";
+
   if(inst.items.length>0) mostrarPrint(inst,inst.items[0]);
+
   inst.items.forEach(it=>{
     const t=el('div','thumb');
-    t.innerHTML=`<img src="${escapeHtml(it.print)}" alt=""><div class="txt"><strong>${escapeHtml(it.nickAluno)}</strong><br><small>${escapeHtml(it.data)}</small></div>`;
+    t.innerHTML=`
+      <img src="${escapeHtml(it.print)}">
+      <div class="txt">
+        <strong>${escapeHtml(it.nickAluno)}</strong><br>
+        <small>${escapeHtml(it.data)}</small>
+      </div>`;
     t.onclick=()=>mostrarPrint(inst,it);
     listaPrints.appendChild(t);
   });
+
   countPrints.innerText=inst.items.length+" prints";
   renderPanel(inst,inst.items);
 }
 
 // mostrar print
-function mostrarPrint(instObj,item){
-  largeImg.src=item.print||"";
-  metaTitle.innerText=`${instObj.instrutor} • ${item.nickAluno}`;
-  metaSub.innerText=`Data: ${item.data||"—"}`;
+function mostrarPrint(inst,item){
+  largeImg.src=item.print;
+  metaTitle.innerText=`${inst.instrutor} • ${item.nickAluno}`;
+  metaSub.innerText="Data: "+(item.data||"—");
   highlightPanelPerson(item.nickAluno);
 }
 
 // painel inferior
 function renderPanel(inst,items){
-  panelBottom.innerHTML=""; panelBottom.style.display="flex";
-  const instrImg=inst.items[0]?.personagem || "https://via.placeholder.com/48";
+  panelBottom.innerHTML="";
+  panelBottom.style.display="flex";
+
   const cardInst=el('div','panel-card');
-  cardInst.innerHTML=`<img src="${escapeHtml(instrImg)}" alt="instrutor"><div><div class="nome">${escapeHtml(inst.instrutor)}</div><div class="tipo">Instrutor</div></div>`;
+  cardInst.innerHTML=`
+    <img src="${inst.personagemInstrutor}">
+    <div><div class="nome">${escapeHtml(inst.instrutor)}</div><div class="tipo">Instrutor</div></div>`;
   panelBottom.appendChild(cardInst);
 
   const seen=new Set();
   items.forEach(it=>{
-    if(!it.nickAluno || seen.has(it.nickAluno)) return;
+    if(seen.has(it.nickAluno)) return;
     seen.add(it.nickAluno);
+
     const card=el('div','panel-card');
-    const avatar=it.personagem||"https://via.placeholder.com/48";
-    card.innerHTML=`<img src="${escapeHtml(avatar)}" alt="aluno"><div><div class="nome">${escapeHtml(it.nickAluno)}</div><div class="tipo">Aluno</div></div>`;
+    card.innerHTML=`
+      <img src="${it.personagem}">
+      <div><div class="nome">${escapeHtml(it.nickAluno)}</div><div class="tipo">Aluno</div></div>`;
     panelBottom.appendChild(card);
   });
 }
@@ -215,18 +232,20 @@ function renderPanel(inst,items){
 function highlightPanelPerson(nick){
   const cards=panelBottom.querySelectorAll('.panel-card');
   cards.forEach(c=>{
-    if(c.innerText.toLowerCase().indexOf((nick||"").toLowerCase())!==-1){
-      c.style.outline="3px solid rgba(0,140,255,0.25)";
-      c.scrollIntoView({behavior:"smooth", inline:"center"});
-      setTimeout(()=>{c.style.outline="";},2200);
+    if(c.innerText.toLowerCase().includes(nick.toLowerCase())){
+      c.style.outline="3px solid rgba(0,140,255,0.35)";
+      c.scrollIntoView({behavior:"smooth",inline:"center"});
+      setTimeout(()=>c.style.outline="",2200);
     }
   });
 }
 
 // abrir original
-function openOriginal(){window.open(largeImg.src,"_blank");}
+function openOriginal(){
+  window.open(largeImg.src,"_blank");
+}
 
-// inicializa
+// inicializar
 carregarDados();
 </script>
 </body>

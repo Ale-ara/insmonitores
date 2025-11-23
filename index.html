@@ -143,27 +143,18 @@ html,body{cursor:none}
 <script>
 /*
   CONFIG: cole aqui o link do Apps Script (web app) gerado acima.
-  Se deixar vazio ou não trocar, a página usará dados de exemplo.
 */
-const API_URL = "https://script.google.com/macros/s/AKfycbyt81HX8VJwfCeC9eque0Prq1ePqZbxJkdcIPKmxsKmzNbKQuavWOxRWZuXBiPNs7sD/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzRUL3zrgKQFHSHeVW7-9gpxcjr4gIVax-Q3vVaK8OHS_7XmiBnd3nbC52057QHenOl/exec";
 
 // cursor
 const cursor = document.querySelector(".custom-cursor");
-document.addEventListener("mousemove", (e)=>{ cursor.style.top = e.clientY + "px"; cursor.style.left = e.clientX + "px"; });
+document.addEventListener("mousemove", (e)=>{
+  cursor.style.top = e.clientY + "px"; 
+  cursor.style.left = e.clientX + "px";
+});
 
 // util
 function el(tag, cls){ const d = document.createElement(tag); if (cls) d.className = cls; return d; }
-
-// dados de exemplo (caso não tenha API pronta)
-const exemplo = [
-  { instrutor:"L2ro", items:[
-      { aluno:"João", nickAluno:"joaosilva", personagem:"https://www.habbo.com.br/habbo-imaging/avatarimage?figure=hd-180-1&direction=2&size=m", print:"https://i.imgur.com/Exemplo1.png", data:"2025-11-21" },
-      { aluno:"Ana", nickAluno:"aninha", personagem:"https://www.habbo.com.br/habbo-imaging/avatarimage?figure=hr-165-41-64&direction=2&size=m", print:"https://i.imgur.com/Exemplo2.png", data:"2025-11-20" }
-  ]},
-  { instrutor:"Marx", items:[
-      { aluno:"Carlos", nickAluno:"carlitos", personagem:"https://www.habbo.com.br/habbo-imaging/avatarimage?figure=hd-999-2&direction=2&size=m", print:"https://i.imgur.com/Exemplo3.png", data:"2025-11-19" }
-  ]}
-];
 
 // UI refs
 const grid = document.getElementById("gridInstrutores");
@@ -180,9 +171,7 @@ let GLOBAL_DATA = [];
 // carregar dados
 function carregarDados(){
   if (!API_URL || API_URL.indexOf("COLE_AQUI")!==-1) {
-    console.warn("API não configurada. Usando dados de exemplo.");
-    GLOBAL_DATA = exemplo;
-    renderPastas(GLOBAL_DATA);
+    console.warn("API não configurada.");
     return;
   }
 
@@ -191,8 +180,6 @@ function carregarDados(){
     renderPastas(GLOBAL_DATA);
   }).catch(err=>{
     console.error("Falha ao carregar API:", err);
-    GLOBAL_DATA = exemplo;
-    renderPastas(GLOBAL_DATA);
   });
 }
 
@@ -213,11 +200,10 @@ function renderPastas(list){
 
 // abrir instrutor
 function abrirInstrutor(nome){
-  const inst = GLOBAL_DATA.find(i => (i.instrutor||i.name||"").toString() === nome);
+  const inst = GLOBAL_DATA.find(i => (i.instrutor||"") === nome);
   if(!inst) return alert("Instrutor não encontrado");
   emptyMsg.style.display = "none";
   viewArea.style.display = "block";
-  // mostrar primeiro print
   if(inst.items && inst.items.length>0){
     mostrarPrint(inst, inst.items[0]);
   } else {
@@ -228,7 +214,7 @@ function abrirInstrutor(nome){
     countPrints.innerText = "0";
     renderPanel(inst, []);
   }
-  // listar thumbs
+
   listaPrints.innerHTML = "";
   inst.items.forEach(it=>{
     const t = el('div','thumb');
@@ -245,7 +231,6 @@ function mostrarPrint(instrutorObj, item){
   largeImg.src = item.print || "";
   metaTitle.innerText = `${instrutorObj.instrutor} • ${item.nickAluno} (${item.aluno})`;
   metaSub.innerText = `Data: ${item.data || "—"}`;
-  // destacar personagem do aluno na panel (foco)
   highlightPanelPerson(item.nickAluno);
 }
 
@@ -254,14 +239,11 @@ function renderPanel(inst, items){
   panelBottom.innerHTML = "";
   panelBottom.style.display = "flex";
 
-  // cartão do instrutor (pegamos o primeiro personagem que tiver do instrutor entre items, se existir)
-  // OBS: como a planilha não tem avatar do instrutor separado, usamos o primeiro personagem dos items como avatar do instrutor
   const instrImg = inst.items && inst.items[0] && inst.items[0].personagem ? inst.items[0].personagem : "https://via.placeholder.com/56";
   const cardInst = el('div','panel-card');
   cardInst.innerHTML = `<img src="${escapeHtml(instrImg)}" alt="instrutor"><div><div class="nome">${escapeHtml(inst.instrutor)}</div><div class="tipo">Instrutor</div></div>`;
   panelBottom.appendChild(cardInst);
 
-  // cartões de alunos (unique by nick)
   const seen = new Set();
   items.forEach(it=>{
     if(!it.nickAluno) return;
@@ -270,7 +252,6 @@ function renderPanel(inst, items){
     const card = el('div','panel-card');
     const avatar = it.personagem || "https://via.placeholder.com/56";
     card.innerHTML = `<img src="${escapeHtml(avatar)}" alt="aluno"><div><div class="nome">${escapeHtml(it.nickAluno)}</div><div class="tipo">${escapeHtml(it.aluno)}</div></div>`;
-    card.onclick = ()=> { /* quando clicar no aluno podemos filtrar prints ou mostrar balao — opcional */ };
     panelBottom.appendChild(card);
   });
 }
@@ -295,7 +276,6 @@ function escapeHtml(s){ if(!s && s!==0) return ""; return s.toString().replace(/
 
 // inicializa
 carregarDados();
-
 </script>
 </body>
 </html>

@@ -4,236 +4,233 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>L2ro • Galeria de Prints</title>
+
 <style>
 :root{
   --ins:#0059a7;--fundo:#0a0a0f;--texto:#f4f4f4
 }
 body{margin:0;font-family:'Poppins',sans-serif;background:var(--fundo);color:var(--texto);overflow:hidden}
 html,body{cursor:none}
-.custom-cursor{position:fixed;top:0;left:0;width:32px;height:32px;pointer-events:none;transform:translate(-50%,-50%);z-index:9999}
+
+.custom-cursor{
+  position:fixed;top:0;left:0;width:32px;height:32px;pointer-events:none;
+  transform:translate(-50%,-50%);z-index:9999
+}
 .custom-cursor img{width:100%;height:100%}
 
+/* LOADING */
 #loading{
   position:fixed;top:0;left:0;width:100%;height:100%;
-  background:#000;display:flex;justify-content:center;align-items:center;
-  z-index:999999;
-  font-size:22px;color:#fff;font-weight:700;
-  letter-spacing:1px;
+  background:#000;display:flex;justify-content:center;align-items:center;z-index:999999;
+  color:white;font-size:22px;font-weight:700;
 }
-.loading-dot{
-  width:10px;height:10px;background:#fff;border-radius:50%;
-  margin-left:6px;animation:blink .7s infinite alternate;
+#loading::after{
+  content:"";width:26px;height:26px;border:4px solid #fff;
+  border-top-color:transparent;border-radius:50%;margin-left:12px;
+  animation:spin 0.8s linear infinite;
 }
-@keyframes blink{from{opacity:1} to{opacity:0.2}}
+@keyframes spin{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
 
+/* APP */
 .app {display:flex;flex-direction:column;height:100vh;width:100vw;}
-.header{display:flex;align-items:center;gap:12px;padding:16px 22px;background:linear-gradient(90deg,var(--ins) 20%, rgba(16,22,98,0.7) 100%);position:relative;z-index:2;}
+.header{display:flex;align-items:center;gap:12px;padding:16px 22px;
+background:linear-gradient(90deg,var(--ins) 20%, rgba(16,22,98,0.7) 100%);z-index:2;}
 .logo {width:56px}
 
-.main {flex:1;display:flex;gap:18px;padding:22px;align-items:flex-start; overflow:auto}
+.main {flex:1;display:flex;gap:18px;padding:22px;overflow:auto}
 .left {flex:1;min-width:320px}
 .grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:18px}
 
-.pasta {background:rgba(255,255,255,0.03);padding:18px;border-radius:12px;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,0.02);transition:transform .18s, box-shadow .18s;}
+.pasta {
+  background:rgba(255,255,255,0.03);padding:18px;border-radius:12px;text-align:center;
+  cursor:pointer;border:1px solid rgba(255,255,255,0.02);transition:.18s;
+}
 .pasta:hover{transform:translateY(-6px);box-shadow:0 18px 60px rgba(0,0,0,0.5)}
 .pasta img{width:68px}
-.pasta h3{margin:10px 0 6px;color:var(--ins)}
 
-.right {width:520px;max-width:44%; min-width:320px;background:rgba(255,255,255,0.03);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);height:calc(100vh - 120px);overflow:auto}
+.right {
+  width:520px;max-width:44%;min-width:320px;background:rgba(255,255,255,0.03);
+  padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);
+  height:calc(100vh - 120px);overflow:auto
+}
 
-.preview {display:flex;flex-direction:column;align-items:center;gap:12px}
-.preview img {max-width:100%;max-height:60vh;border-radius:8px;object-fit:contain;box-shadow:0 18px 60px rgba(0,0,0,0.6)}
-
-.meta {display:flex;gap:12px;align-items:center;width:100%}
-.meta .info {flex:1;text-align:left}
-.meta .info .title {font-weight:700;color:var(--ins);margin-bottom:6px}
-.meta .info .small {font-size:13px;color:#cfd9ff}
+.preview img {
+  max-width:100%;max-height:60vh;border-radius:8px;object-fit:contain;
+  box-shadow:0 18px 60px rgba(0,0,0,0.6)
+}
 
 .lista-prints{display:flex;flex-wrap:wrap;gap:10px}
-.thumb {display:flex;flex-direction:column;align-items:center;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);cursor:pointer;border:1px solid rgba(255,255,255,0.01);width:120px}
-.thumb img {width:100%;height:70px;object-fit:cover;border-radius:6px;margin-bottom:4px}
-.thumb .txt small{color:#cfd9ff;font-size:11px;text-align:center}
+.thumb{
+  width:120px;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;
+  cursor:pointer;text-align:center
+}
+.thumb img{width:100%;height:70px;border-radius:6px;object-fit:cover}
 
-.panel-bottom {position:fixed;left:18px;bottom:18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;z-index:9999;}
-.panel-card {background:rgba(255,255,255,0.95);color:#000;padding:6px;border-radius:10px;display:flex;gap:6px;align-items:center;box-shadow:0 6px 24px rgba(0,0,0,0.3);}
-.panel-card img{width:48px;height:48px;border-radius:8px;object-fit:cover}
-.panel-card .nome{font-weight:700;font-size:12px}
-.panel-card .tipo{font-size:10px;color:#333}
+.panel-bottom{
+  position:fixed;left:18px;bottom:18px;display:flex;gap:8px;z-index:9999;
+}
+.panel-card{
+  background:#fff;color:#000;padding:6px;border-radius:10px;
+  display:flex;gap:6px;align-items:center;
+}
+.panel-card img{width:48px;height:48px;border-radius:8px}
 
-.voltar {position:fixed;right:18px;bottom:18px;background:var(--ins);color:#fff;border:none;padding:12px;border-radius:10px;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,0.6);z-index:9999}
+.voltar{
+  position:fixed;right:18px;bottom:18px;background:var(--ins);color:#fff;
+  padding:12px;border-radius:10px;cursor:pointer
+}
 </style>
 </head>
+
 <body>
 
-<div id="loading">
-  Carregando
-  <div class="loading-dot"></div>
-</div>
+<div id="loading">Carregando</div>
 
 <div class="custom-cursor">
   <img src="https://www.habbo.com.br/habbo-imaging/badge/b09064s43131s50134s17113s171153f3edc7f555be912c2392e285b05bd34.gif">
 </div>
 
 <div class="app">
-  <header class="header">
-    <img class="logo" src="https://i.imgur.com/2HJ0aLw.png">
-    <div>
-      <div style="font-weight:700;color:#fff">Aulas monitoradas pelo L2ro</div>
-      <div style="font-size:12px;color:#dfeaff">Clique numa pasta para ver prints; clique num print para abrir no preview.</div>
-    </div>
-  </header>
 
-  <div class="main">
-    <div class="left">
-      <h2 style="color:#fff;margin:8px 0 14px">Instrutores</h2>
-      <div class="grid" id="gridInstrutores"></div>
-    </div>
+<header class="header">
+  <img class="logo" src="https://i.imgur.com/2HJ0aLw.png">
+  <div>
+    <div style="font-weight:700">Aulas monitoradas pelo L2ro</div>
+    <div style="font-size:12px;color:#dfeaff">Clique no instrutor e veja as aplicações</div>
+  </div>
+</header>
 
-    <div class="right">
-      <div id="emptyMsg" style="color:#cfd9ff">Selecione um instrutor para ver os prints</div>
-      <div id="viewArea" style="display:none">
-        <div class="preview">
-          <img id="largeImg">
-          <div class="meta">
-            <div class="info">
-              <div class="title" id="metaTitle"></div>
-              <div class="small" id="metaSub"></div>
-            </div>
-            <button onclick="openOriginal()" style="background:var(--ins);border:none;padding:10px 12px;border-radius:8px;color:#fff;cursor:pointer">Abrir original</button>
-          </div>
-        </div>
-
-        <hr style="width:100%;margin:14px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
-
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-          <div style="font-weight:700;color:#fff">Prints</div>
-          <div style="color:#cfd9ff;font-size:13px" id="countPrints"></div>
-        </div>
-
-        <div class="lista-prints" id="listaPrints"></div>
-      </div>
-    </div>
+<div class="main">
+  <div class="left">
+    <h2>Instrutores</h2>
+    <div class="grid" id="gridInstrutores"></div>
   </div>
 
-  <button class="voltar" onclick="location.reload()">⤺ Reiniciar</button>
-  <div class="panel-bottom" id="panelBottom" style="display:none"></div>
+  <div class="right">
+    <div id="emptyMsg" style="color:#cfd9ff">Selecione um instrutor</div>
+
+    <div id="viewArea" style="display:none">
+      <div class="preview">
+        <img id="largeImg">
+        <div>
+          <h3 id="metaTitle"></h3>
+          <div id="metaSub" style="color:#cfd9ff"></div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <strong>Prints</strong>
+        <div id="countPrints"></div>
+      </div>
+
+      <div class="lista-prints" id="listaPrints"></div>
+    </div>
+  </div>
+</div>
+
+<button class="voltar" onclick="location.reload()">⤺ Reiniciar</button>
+<div class="panel-bottom" id="panelBottom" style="display:none"></div>
+
 </div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbzY__6eJvLpaw7ahmaRNuQoIYSpfv_SOjOsZvDpz1EfjOg8wqBG1vG9My2qfnxFril9/exec";
 
 function el(t,c){const d=document.createElement(t);if(c)d.className=c;return d;}
-function escapeHtml(s){return s?s.toString().replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])):"";}
+function escapeHtml(s){return s? s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])):"";}
+
 const grid=document.getElementById("gridInstrutores");
-const viewArea=document.getElementById("viewArea");
 const emptyMsg=document.getElementById("emptyMsg");
+const viewArea=document.getElementById("viewArea");
 const listaPrints=document.getElementById("listaPrints");
 const largeImg=document.getElementById("largeImg");
 const metaTitle=document.getElementById("metaTitle");
 const metaSub=document.getElementById("metaSub");
 const countPrints=document.getElementById("countPrints");
 const panelBottom=document.getElementById("panelBottom");
-let GLOBAL_DATA=[];
+
+let DATA=[];
 
 document.addEventListener("mousemove",e=>{
-  const cursor=document.querySelector(".custom-cursor");
-  cursor.style.top=e.clientY+"px";
-  cursor.style.left=e.clientX+"px";
+  document.querySelector(".custom-cursor").style.transform=`translate(${e.clientX}px,${e.clientY}px)`
 });
 
-function carregarDados(){
-  fetch(API_URL)
-    .then(r=>r.json())
-    .then(json=>{GLOBAL_DATA=json;renderPastas(json);})
-    .catch(()=>{})
-    .finally(()=>document.getElementById("loading").style.display="none");
-}
+fetch(API_URL)
+  .then(r=>r.json())
+  .then(json=>{
+    DATA=json;
+    renderInstrutores(json);
+    document.getElementById("loading").style.display="none";
+  });
 
-function renderPastas(list){
+function renderInstrutores(list){
   grid.innerHTML="";
   list.forEach(inst=>{
-    const card=el('div','pasta');
+    const card=el("div","pasta");
     card.innerHTML=`
       <img src="https://cdn-icons-png.flaticon.com/512/716/716784.png">
       <h3>${escapeHtml(inst.instrutor)}</h3>
-      <div style="font-size:12px;color:#cfd9ff">${inst.items.length} prints</div>`;
-    card.onclick=()=>abrirInstrutor(inst.instrutor);
+      <div style="font-size:12px;color:#cfd9ff">${inst.aplicacoes.length} aplicações</div>`;
+    card.onclick=()=>abrirInstrutor(inst);
     grid.appendChild(card);
   });
 }
 
-function abrirInstrutor(nome){
-  const inst=GLOBAL_DATA.find(i=>i.instrutor===nome);
-  if(!inst) return;
-
+function abrirInstrutor(inst){
   emptyMsg.style.display="none";
   viewArea.style.display="block";
   listaPrints.innerHTML="";
 
-  if(inst.items.length>0) mostrarPrint(inst,inst.items[0]);
-
-  inst.items.forEach(it=>{
-    const t=el('div','thumb');
-    t.innerHTML=`
-      <img src="${escapeHtml(it.print)}">
-      <div class="txt">
-        <strong>${escapeHtml(it.nickAluno)}</strong><br>
-        <small>${escapeHtml(it.data)}</small>
-      </div>`;
-    t.onclick=()=>mostrarPrint(inst,it);
-    listaPrints.appendChild(t);
+  let printsFlatten=[];
+  inst.aplicacoes.forEach(app=>{
+    app.prints.forEach(p=>{
+      printsFlatten.push({
+        print:p,
+        alunos:app.alunos.join(", "),
+        data:app.data
+      });
+    });
   });
 
-  countPrints.innerText=inst.items.length+" prints";
-  renderPanel(inst,inst.items);
+  if(printsFlatten.length>0) mostrarPrint(printsFlatten[0]);
+
+  printsFlatten.forEach(p=>{
+    const card=el("div","thumb");
+    card.innerHTML=`
+      <img src="${p.print}">
+      <small>${escapeHtml(p.alunos)}</small>
+    `;
+    card.onclick=()=>mostrarPrint(p);
+    listaPrints.appendChild(card);
+  });
+
+  countPrints.innerText=printsFlatten.length+" prints";
+
+  renderPanel(inst);
 }
 
-function mostrarPrint(inst,item){
+function mostrarPrint(item){
   largeImg.src=item.print;
-  metaTitle.innerText=`${inst.instrutor} • ${item.nickAluno}`;
-  metaSub.innerText="Data: "+(item.data||"—");
-  highlightPanelPerson(item.nickAluno);
+  metaTitle.innerText=item.alunos;
+  metaSub.innerText="Data: "+item.data;
 }
 
-function renderPanel(inst,items){
+function renderPanel(inst){
   panelBottom.innerHTML="";
   panelBottom.style.display="flex";
 
-  const cardInst=el('div','panel-card');
-  cardInst.innerHTML=`
+  const card=el("div","panel-card");
+  card.innerHTML=`
     <img src="${inst.personagemInstrutor}">
-    <div><div class="nome">${escapeHtml(inst.instrutor)}</div><div class="tipo">Instrutor</div></div>`;
-  panelBottom.appendChild(cardInst);
-
-  const seen=new Set();
-  items.forEach(it=>{
-    if(seen.has(it.nickAluno)) return;
-    seen.add(it.nickAluno);
-
-    const c=el('div','panel-card');
-    c.innerHTML=`
-      <img src="${it.personagem}">
-      <div><div class="nome">${escapeHtml(it.nickAluno)}</div><div class="tipo">Aluno</div></div>`;
-    panelBottom.appendChild(c);
-  });
+    <div><div class="nome">${inst.instrutor}</div><div class="tipo">Instrutor</div></div>`;
+  panelBottom.appendChild(card);
 }
-
-function highlightPanelPerson(nick){
-  const cards=panelBottom.querySelectorAll('.panel-card');
-  cards.forEach(c=>{
-    if(c.innerText.toLowerCase().includes(nick.toLowerCase())){
-      c.style.outline="3px solid rgba(0,140,255,0.35)";
-      c.scrollIntoView({behavior:"smooth",inline:"center"});
-      setTimeout(()=>c.style.outline="",2200);
-    }
-  });
-}
-
-function openOriginal(){
-  window.open(largeImg.src,"_blank");
-}
-
-carregarDados();
 </script>
+
 </body>
 </html>

@@ -3,138 +3,299 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>L2ro • Monitoramento</title>
-
+<title>L2ro • Galeria de Prints</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <style>
-:root {
-  --ins: #0059a7;
-  --amarelo: #057ee8;
-  --fundo: #0a0a0f;
-  --texto: #f4f4f4;
-  --glass: rgba(255,255,255,0.05);
+:root{
+  --ins:#0059a7;--amarelo:#057ee8;--fundo:#0a0a0f;--texto:#f4f4f4;--glass:rgba(255,255,255,0.05)
 }
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:'Poppins',sans-serif;
-  background:var(--fundo);
-  color:var(--texto);
-  overflow-x:hidden;
-}
+body{margin:0;font-family:'Poppins',sans-serif;background:var(--fundo);color:var(--texto);overflow:hidden}
 html,body{cursor:none}
 .custom-cursor{position:fixed;top:0;left:0;width:32px;height:32px;pointer-events:none;transform:translate(-50%,-50%);z-index:9999}
 .custom-cursor img{width:100%;height:100%}
 
-/* Container com as duas telas */
-.container{display:flex;width:200%;transform:translateX(0%);transition:transform 0.6s ease-in-out;}
+/* app layout */
+.app {display:flex;flex-direction:column;height:100vh;width:100vw;}
 
-/* tela principal (left) */
-#ins{
-  background: linear-gradient(90deg,var(--ins) 20%,rgba(16,22,98,0.748) 100%), url(https://i.imgur.com/5HBJY5z.png) right center/cover no-repeat;
-  min-height:100vh;width:100vw;position:relative;display:flex;justify-content:center;align-items:center;text-align:center;
+/* header */
+.header {
+  display:flex;align-items:center;gap:12px;padding:16px 22px;
+  background: linear-gradient(90deg,var(--ins) 20%, rgba(16,22,98,0.7) 100%), url(https://i.imgur.com/5HBJY5z.png) right center/cover no-repeat;
+  position:relative; z-index:2;
 }
-#ins::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.55)}
-#ins .content{position:relative;z-index:2;max-width:800px;padding:0 20px}
-#ins img.logo{width:200px;margin-bottom:20px;animation:flutuar 3s ease-in-out infinite}
-@keyframes flutuar{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-#ins h1{font-size:3rem;color:#fff;margin:0}
-#ins p{font-size:1.1rem;opacity:0.95;margin-top:10px;color:#e6e6e6;line-height:1.6}
+.header::before{content:'';position:absolute;inset:0;background:rgba(0,0,0,0.45)}
+.header .inner{position:relative;z-index:3;display:flex;align-items:center;gap:12px}
+.logo {width:56px}
 
-/* botões */
-.botao-container{margin-top:35px;display:flex;justify-content:center;gap:20px;flex-wrap:wrap}
-.botao{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 24px;font-weight:600;text-transform:uppercase;color:#fff;background:transparent;border:1.5px solid rgba(0,140,255,0.7);border-radius:10px;font-size:0.9rem;transition:all .3s; text-decoration:none}
-.botao::before{content:"";position:absolute;top:0;left:-75%;width:50%;height:100%;background:linear-gradient(120deg,transparent,rgba(0,140,255,0.3),transparent);transform:skewX(-25deg);transition:all .5s}
-.botao:hover::before{left:125%}
-.botao:hover{border-color:#008cff;box-shadow:0 0 10px #008cff80;transform:translateY(-2px)}
-.botao i{font-size:1rem}
+/* main area */
+.main {flex:1;display:flex;gap:18px;padding:22px;align-items:flex-start; overflow:auto}
 
-/* segunda tela placeholder (right) */
-#side {
-  min-height:100vh;
-  width:100vw;
-  background: #07070a;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  position:relative;
+/* left: grid de pastas / ou lista de prints */
+.left {flex:1;min-width:320px}
+.grid {display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:18px}
+
+/* pasta card */
+.pasta {
+  background:rgba(255,255,255,0.03);padding:18px;border-radius:12px;text-align:center;cursor:pointer;border:1px solid rgba(255,255,255,0.02);
+  transition:transform .18s, box-shadow .18s;
 }
-.side-card {
-  width: 720px;
-  max-width: 92%;
-  background: rgba(255,255,255,0.04);
-  padding: 32px;
-  border-radius: 16px;
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255,255,255,0.03);
+.pasta:hover{transform:translateY(-6px);box-shadow:0 18px 60px rgba(0,0,0,0.5)}
+.pasta img{width:68px}
+.pasta h3{margin:10px 0 6px;color:var(--ins)}
+
+/* right: visualizador / detalhes */
+.right {width:520px;max-width:44%; min-width:320px;background:rgba(255,255,255,0.03);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);height:calc(100vh - 120px);overflow:auto}
+.preview {display:flex;flex-direction:column;align-items:center;gap:12px}
+.preview img {max-width:100%;max-height:60vh;border-radius:8px;object-fit:contain;box-shadow:0 18px 60px rgba(0,0,0,0.6)}
+.meta {display:flex;gap:12px;align-items:center;width:100%}
+.meta .info {flex:1;text-align:left}
+.meta .info .title {font-weight:700;color:var(--ins);margin-bottom:6px}
+.meta .info .small {font-size:13px;color:#cfd9ff}
+
+/* lista de prints */
+.lista-prints{display:flex;flex-direction:column;gap:10px}
+.thumb {display:flex;gap:12px;align-items:center;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);cursor:pointer;border:1px solid rgba(255,255,255,0.01)}
+.thumb img {width:110px;height:70px;object-fit:cover;border-radius:6px}
+.thumb .txt small{color:#cfd9ff}
+
+/* painel inferior com instrutor + alunos */
+.panel-bottom {
+  position:fixed;left:18px;bottom:18px;display:flex;gap:14px;align-items:flex-end;z-index:9999;
 }
-.side-card h2{color:var(--amarelo);margin-bottom:12px}
+.panel-card {
+  background:rgba(255,255,255,0.95);color:#000;padding:8px;border-radius:10px;display:flex;gap:8px;align-items:center;box-shadow:0 6px 24px rgba(0,0,0,0.3)
+}
+.panel-card img{width:56px;height:56px;border-radius:8px;object-fit:cover}
+.panel-card .nome{font-weight:700;font-size:13px}
+.panel-card .tipo{font-size:11px;color:#333}
 
-/* voltar */
-#voltarBtn {position:fixed;bottom:30px;left:30px;background:var(--ins);color:#fff;border:none;border-radius:50%;width:45px;height:45px;font-size:1.3rem;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 0 10px #0059a780;transition:.3s;z-index:1000}
+/* small helpers */
+.voltar {position:fixed;right:18px;bottom:18px;background:var(--ins);color:#fff;border:none;padding:12px;border-radius:10px;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,0.6);z-index:9999}
 
-/* responsivo */
-@media(max-width:900px){
-  #ins h1{font-size:2rem}
+/* responsive */
+@media(max-width:980px){
+  .main{flex-direction:column}
+  .right{width:100%;max-width:100%;height:auto}
+  .panel-bottom{left:8px;bottom:8px;flex-direction:column-reverse}
 }
 </style>
 </head>
 <body>
-
 <div class="custom-cursor"><img src="https://www.habbo.com.br/habbo-imaging/badge/b09064s43131s50134s17113s171153f3edc7f555be912c2392e285b05bd34.gif" alt="cursor"></div>
 
-<div class="container" id="container">
-  <!-- TELA PRINCIPAL -->
-  <section id="ins">
-    <div class="content">
-      <img src="https://i.imgur.com/2HJ0aLw.png" alt="Logo" class="logo" />
-      <h1>Confira as aulas monitoradas pelo L2ro</h1>
-      <p>Acompanhe os instrutores, acesse as pastas e visualize os prints com nick, personagem e data.</p>
-
-      <div class="botao-container">
-        <a class="botao" id="abrirPastas" href="#"><i class="fa-solid fa-folder-open"></i> Ver Instrutores</a>
-        <a class="botao" href="instrutores.html"><i class="fa-solid fa-table-list"></i> Ir direto (instrutores)</a>
+<div class="app">
+  <header class="header">
+    <div class="inner">
+      <img class="logo" src="https://i.imgur.com/2HJ0aLw.png" alt="logo">
+      <div>
+        <div style="font-weight:700;color:#fff">Confira as aulas monitoradas pelo L2ro</div>
+        <div style="font-size:12px;color:#dfeaff">Clique numa pasta para ver prints; clique num print para abrir no preview.</div>
       </div>
     </div>
-  </section>
+  </header>
 
-  <!-- TELA DE PASTAS RÁPIDA (aparece ao deslizar) -->
-  <section id="side">
-    <div class="side-card">
-      <h2>Pastas de Instrutores</h2>
-      <p>Você será levado à lista de instrutores. Clique em qualquer pasta para ver as aulas.</p>
-      <div style="margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-        <a class="botao" href="instrutores.html">Abrir lista</a>
-        <a class="botao" href="index.html">Voltar</a>
+  <div class="main">
+    <div class="left">
+      <h2 style="color:#fff;margin:8px 0 14px">Instrutores</h2>
+      <div class="grid" id="gridInstrutores">
+        <!-- pastas vão aqui -->
       </div>
     </div>
-  </section>
+
+    <div class="right">
+      <div id="emptyMsg" style="color:#cfd9ff">Selecione um instrutor para ver os prints</div>
+
+      <div id="viewArea" style="display:none">
+        <div class="preview">
+          <img id="largeImg" src="" alt="print">
+          <div class="meta">
+            <div class="info">
+              <div class="title" id="metaTitle"></div>
+              <div class="small" id="metaSub"></div>
+            </div>
+            <div>
+              <button onclick="openOriginal()" style="background:var(--ins);border:none;padding:10px 12px;border-radius:8px;color:#fff;cursor:pointer">Abrir original</button>
+            </div>
+          </div>
+        </div>
+
+        <hr style="width:100%;margin:14px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+          <div style="font-weight:700;color:#fff">Prints</div>
+          <div style="color:#cfd9ff;font-size:13px" id="countPrints"></div>
+        </div>
+
+        <div class="lista-prints" id="listaPrints">
+          <!-- thumbs -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="voltar" onclick="location.reload()">⤺ Reiniciar</button>
+
+  <!-- painel inferior: instrutor e alunos -->
+  <div class="panel-bottom" id="panelBottom" style="display:none"></div>
 </div>
 
-<button id="voltarBtn" title="Voltar" onclick="voltarPagina()">⤺</button>
-
-<script src="https://kit.fontawesome.com/a2d9d6a04b.js" crossorigin="anonymous"></script>
 <script>
+/*
+  CONFIG: cole aqui o link do Apps Script (web app) gerado acima.
+  Se deixar vazio ou não trocar, a página usará dados de exemplo.
+*/
+const API_URL = "COLE_AQUI_O_LINK_DO_APPS_SCRIPT";
+
+// cursor
 const cursor = document.querySelector(".custom-cursor");
-document.addEventListener("mousemove",(e)=>{cursor.style.top=`${e.clientY}px`;cursor.style.left=`${e.clientX}px`})
+document.addEventListener("mousemove", (e)=>{ cursor.style.top = e.clientY + "px"; cursor.style.left = e.clientX + "px"; });
 
-// slide para a direita quando clicar "Ver Instrutores"
-const abrir = document.getElementById("abrirPastas");
-const container = document.getElementById("container");
-const voltarBtn = document.getElementById("voltarBtn");
+// util
+function el(tag, cls){ const d = document.createElement(tag); if (cls) d.className = cls; return d; }
 
-abrir.addEventListener("click", (ev)=>{
-  ev.preventDefault();
-  container.style.transform = "translateX(-50%)";
-  voltarBtn.style.display = "flex";
-});
+// dados de exemplo (caso não tenha API pronta)
+const exemplo = [
+  { instrutor:"L2ro", items:[
+      { aluno:"João", nickAluno:"joaosilva", personagem:"https://www.habbo.com.br/habbo-imaging/avatarimage?figure=hd-180-1&direction=2&size=m", print:"https://i.imgur.com/Exemplo1.png", data:"2025-11-21" },
+      { aluno:"Ana", nickAluno:"aninha", personagem:"https://www.habbo.com.br/habbo-imaging/avatarimage?figure=hr-165-41-64&direction=2&size=m", print:"https://i.imgur.com/Exemplo2.png", data:"2025-11-20" }
+  ]},
+  { instrutor:"Marx", items:[
+      { aluno:"Carlos", nickAluno:"carlitos", personagem:"https://www.habbo.com.br/habbo-imaging/avatarimage?figure=hd-999-2&direction=2&size=m", print:"https://i.imgur.com/Exemplo3.png", data:"2025-11-19" }
+  ]}
+];
 
-function voltarPagina(){
-  container.style.transform = "translateX(0%)";
-  voltarBtn.style.display = "none";
+// UI refs
+const grid = document.getElementById("gridInstrutores");
+const viewArea = document.getElementById("viewArea");
+const emptyMsg = document.getElementById("emptyMsg");
+const listaPrints = document.getElementById("listaPrints");
+const largeImg = document.getElementById("largeImg");
+const metaTitle = document.getElementById("metaTitle");
+const metaSub = document.getElementById("metaSub");
+const countPrints = document.getElementById("countPrints");
+const panelBottom = document.getElementById("panelBottom");
+let GLOBAL_DATA = [];
+
+// carregar dados
+function carregarDados(){
+  if (!API_URL || API_URL.indexOf("COLE_AQUI")!==-1) {
+    console.warn("API não configurada. Usando dados de exemplo.");
+    GLOBAL_DATA = exemplo;
+    renderPastas(GLOBAL_DATA);
+    return;
+  }
+
+  fetch(API_URL).then(r=>r.json()).then(json=>{
+    GLOBAL_DATA = json;
+    renderPastas(GLOBAL_DATA);
+  }).catch(err=>{
+    console.error("Falha ao carregar API:", err);
+    GLOBAL_DATA = exemplo;
+    renderPastas(GLOBAL_DATA);
+  });
 }
 
-// se quiser abrir instrutores.html diretamente, link já criado
+// render pastas (instrutores)
+function renderPastas(list){
+  grid.innerHTML = "";
+  list.forEach(inst => {
+    const card = el('div','pasta');
+    card.innerHTML = `
+      <img src="https://cdn-icons-png.flaticon.com/512/716/716784.png" alt="pasta">
+      <h3>${escapeHtml(inst.instrutor)}</h3>
+      <div style="font-size:12px;color:#cfd9ff">${inst.items.length} prints</div>
+    `;
+    card.onclick = ()=> abrirInstrutor(inst.instrutor);
+    grid.appendChild(card);
+  });
+}
+
+// abrir instrutor
+function abrirInstrutor(nome){
+  const inst = GLOBAL_DATA.find(i => (i.instrutor||i.name||"").toString() === nome);
+  if(!inst) return alert("Instrutor não encontrado");
+  emptyMsg.style.display = "none";
+  viewArea.style.display = "block";
+  // mostrar primeiro print
+  if(inst.items && inst.items.length>0){
+    mostrarPrint(inst, inst.items[0]);
+  } else {
+    largeImg.src = "";
+    metaTitle.innerText = nome + " — sem prints";
+    metaSub.innerText = "";
+    listaPrints.innerHTML = "";
+    countPrints.innerText = "0";
+    renderPanel(inst, []);
+  }
+  // listar thumbs
+  listaPrints.innerHTML = "";
+  inst.items.forEach(it=>{
+    const t = el('div','thumb');
+    t.innerHTML = `<img src="${escapeHtml(it.print)}" alt=""><div class="txt"><strong>${escapeHtml(it.nickAluno)} • ${escapeHtml(it.aluno)}</strong><br><small>${escapeHtml(it.data)}</small></div>`;
+    t.onclick = ()=> mostrarPrint(inst, it);
+    listaPrints.appendChild(t);
+  });
+  countPrints.innerText = `${inst.items.length} prints`;
+  renderPanel(inst, inst.items);
+}
+
+// mostra print no preview
+function mostrarPrint(instrutorObj, item){
+  largeImg.src = item.print || "";
+  metaTitle.innerText = `${instrutorObj.instrutor} • ${item.nickAluno} (${item.aluno})`;
+  metaSub.innerText = `Data: ${item.data || "—"}`;
+  // destacar personagem do aluno na panel (foco)
+  highlightPanelPerson(item.nickAluno);
+}
+
+// gerar painel inferior com instrutor + alunos
+function renderPanel(inst, items){
+  panelBottom.innerHTML = "";
+  panelBottom.style.display = "flex";
+
+  // cartão do instrutor (pegamos o primeiro personagem que tiver do instrutor entre items, se existir)
+  // OBS: como a planilha não tem avatar do instrutor separado, usamos o primeiro personagem dos items como avatar do instrutor
+  const instrImg = inst.items && inst.items[0] && inst.items[0].personagem ? inst.items[0].personagem : "https://via.placeholder.com/56";
+  const cardInst = el('div','panel-card');
+  cardInst.innerHTML = `<img src="${escapeHtml(instrImg)}" alt="instrutor"><div><div class="nome">${escapeHtml(inst.instrutor)}</div><div class="tipo">Instrutor</div></div>`;
+  panelBottom.appendChild(cardInst);
+
+  // cartões de alunos (unique by nick)
+  const seen = new Set();
+  items.forEach(it=>{
+    if(!it.nickAluno) return;
+    if(seen.has(it.nickAluno)) return;
+    seen.add(it.nickAluno);
+    const card = el('div','panel-card');
+    const avatar = it.personagem || "https://via.placeholder.com/56";
+    card.innerHTML = `<img src="${escapeHtml(avatar)}" alt="aluno"><div><div class="nome">${escapeHtml(it.nickAluno)}</div><div class="tipo">${escapeHtml(it.aluno)}</div></div>`;
+    card.onclick = ()=> { /* quando clicar no aluno podemos filtrar prints ou mostrar balao — opcional */ };
+    panelBottom.appendChild(card);
+  });
+}
+
+// highlight no panel (opcional visual)
+function highlightPanelPerson(nick){
+  const cards = panelBottom.querySelectorAll('.panel-card');
+  cards.forEach(c=>{
+    if(c.innerText && c.innerText.toLowerCase().indexOf((nick||"").toLowerCase())!==-1){
+      c.style.outline = "3px solid rgba(0,140,255,0.25)";
+      c.scrollIntoView({behavior:"smooth", inline:"center"});
+      setTimeout(()=>{ c.style.outline = ""; }, 2200);
+    }
+  });
+}
+
+// abrir original
+function openOriginal(){ window.open(document.getElementById('largeImg').src, "_blank"); }
+
+// proteção simples ao injetar texto
+function escapeHtml(s){ if(!s && s!==0) return ""; return s.toString().replace(/[&<>"']/g, function(m){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]); }); }
+
+// inicializa
+carregarDados();
+
 </script>
 </body>
 </html>

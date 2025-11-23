@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Visualizador • L2ro</title>
+
+<style>
+:root{--ins:#0059a7;--fundo:#0a0a0f;--texto:#f4f4f4}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Poppins',sans-serif;background:linear-gradient(180deg,rgba(0,0,0,0.85),rgba(0,0,0,0.95));color:var(--texto);display:flex;flex-direction:column;min-height:100vh}
+.viewer{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+.img-wrap{max-width:1200px;width:100%;max-height:90vh;display:flex;flex-direction:column;align-items:center;gap:14px}
+img.full{max-width:100%;max-height:80vh;border-radius:10px;box-shadow:0 18px 60px rgba(0,0,0,0.6);object-fit:contain}
+.meta{display:flex;gap:12px;align-items:center}
+.personagem{display:flex;flex-direction:column;align-items:center;gap:6px}
+.personagem img{width:90px}
+.btns{display:flex;gap:10px}
+
+/* voltar */
+.voltar{position:fixed;left:20px;bottom:20px;background:var(--ins);color:#fff;border:none;padding:12px;border-radius:10px;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+</style>
+</head>
+<body>
+
+<div class="viewer">
+  <div class="img-wrap">
+    <img id="imgFull" class="full" src="" alt="Print">
+    <div class="meta">
+      <div class="personagem">
+        <img id="personagem" src="" alt="personagem">
+        <div id="nick" style="color:#dff0ff;font-weight:700"></div>
+      </div>
+      <div style="flex:1;color:#cbdcff" id="infoExtra">Clique no botão voltar para fechar</div>
+      <div class="btns">
+        <a id="abrirOriginal" target="_blank" class="voltar" style="background:#333;">Abrir original</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="voltar" onclick="history.back()">⤺ Voltar</button>
+
+<script>
+// recebe params
+const params = new URLSearchParams(location.search);
+const img = params.get("img");
+const personagem = params.get("personagem");
+const nick = params.get("nick");
+
+document.getElementById("imgFull").src = img || "https://via.placeholder.com/1000x600?text=Sem+imagem";
+document.getElementById("personagem").src = personagem || "https://via.placeholder.com/90";
+document.getElementById("nick").innerText = nick || "";
+const abrirOriginal = document.getElementById("abrirOriginal");
+abrirOriginal.href = img || "#";
+</script>
+
+</body>
+</html>

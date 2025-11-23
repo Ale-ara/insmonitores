@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aulas Monitoradas</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #0d0d0d;
+        color: #fff;
+        font-family: "Poppins", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .container {
+        text-align: center;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+        font-size: 2.3rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+    p {
+        font-size: 1.1rem;
+        opacity: 0.8;
+        margin-bottom: 25px;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        font-size: 1.1rem;
+        background: #6c63ff;
+        border: none;
+        border-radius: 8px;
+        color: #fff;
+        cursor: pointer;
+        transition: 0.3s;
+        text-decoration: none;
+    }
+
+    .btn:hover {
+        background: #5848ff;
+        transform: scale(1.03);
+    }
+
+    @keyframes fadeIn {
+        from {opacity: 0; transform: translateY(15px);}
+        to {opacity: 1; transform: translateY(0);}
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <h1>Confira as aulas monitoradas pelo <span style="color:#6c63ff;">L2ro</span></h1>
+        <p>Acompanhamento completo dos instrutores e alunos.</p>
+        <a href="instrutores.html" class="btn">Ver monitores</a>
+    </div>
+</body>
+</html>

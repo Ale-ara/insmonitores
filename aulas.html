@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aulas Monitoradas</title>
+<style>
+    body {
+        background: #0d0d0d;
+        color: #fff;
+        font-family: "Poppins", sans-serif;
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        color: #6c63ff;
+        margin-bottom: 25px;
+    }
+
+    .lista-aulas {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        max-width: 700px;
+        margin: auto;
+    }
+
+    .card {
+        background: #181818;
+        padding: 15px;
+        border-radius: 10px;
+        border: 1px solid #222;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .card img {
+        width: 70px;
+        border-radius: 8px;
+    }
+
+    .card button {
+        margin-left: auto;
+        background: #6c63ff;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        color: #fff;
+        cursor: pointer;
+    }
+
+</style>
+</head>
+
+<body>
+
+<h2 id="titulo"></h2>
+
+<div class="lista-aulas" id="listaAulas">
+    <!-- Conteúdo vindo da planilha -->
+</div>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const instrutor = urlParams.get("instrutor");
+document.getElementById("titulo").innerText = "Aulas monitoradas do instrutor " + instrutor;
+
+// EXEMPLO de lista (antes de conectar com Sheets)
+const aulasExemplo = [
+    { aluno: "Hiroshi", personagem: "https://i.imgur.com/7sNkR.png", print: "https://i.imgur.com/Exemplo1.png", data: "21/11/2025" },
+    { aluno: "Akira", personagem: "https://i.imgur.com/abc32.png", print: "https://i.imgur.com/Exemplo2.png", data: "20/11/2025" }
+];
+
+const lista = document.getElementById("listaAulas");
+
+aulasExemplo.forEach(a => {
+    lista.innerHTML += `
+        <div class="card">
+            <img src="${a.personagem}" />
+            <div>
+                <strong>Aluno:</strong> ${a.aluno}<br>
+                <small>${a.data}</small>
+            </div>
+            <button onclick="ver('${a.print}')">Ver print</button>
+        </div>
+    `;
+});
+
+function ver(link) {
+    window.open(link, "_blank");
+}
+</script>
+
+</body>
+</html>

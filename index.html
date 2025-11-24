@@ -122,6 +122,54 @@ html,body{cursor:none}
   box-shadow:0 8px 30px rgba(0,0,0,0.6);z-index:9999;
 }
 
+
+/* ===========================
+      SCROLLBAR AZUL
+=========================== */
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:rgba(255,255,255,0.05);border-radius:10px;}
+::-webkit-scrollbar-thumb{
+  background:var(--ins);border-radius:10px;
+  box-shadow:0 0 8px rgba(0,140,255,0.4);
+}
+::-webkit-scrollbar-thumb:hover{background:#0073d6;}
+
+*{scrollbar-width:thin;scrollbar-color:var(--ins) rgba(255,255,255,0.05);}
+
+
+/* ===========================
+      RESPONSIVIDADE TOTAL
+=========================== */
+@media(max-width:1024px){
+  .main{flex-direction:column;padding:12px;}
+  .right{width:100%;max-width:100%;height:auto;}
+  .left{width:100%;}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));}
+}
+
+@media(max-width:480px){
+  .header .inner{flex-direction:column;text-align:center;}
+  .main{flex-direction:column;padding:10px;}
+  .left h2{text-align:center;}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;}
+  .pasta img{width:55px;}
+  .right{width:100%;max-width:100%;height:auto;padding:12px;}
+  .thumb{width:100px;}
+  #largeImg{max-height:40vh;}
+  .panel-bottom{
+    bottom:10px;left:10px;right:10px;
+    justify-content:center;flex-wrap:wrap;gap:4px;
+  }
+  .panel-card img{width:40px;height:40px;}
+}
+
+@media(max-width:360px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));}
+  .thumb{width:90px;}
+  .panel-card{padding:4px;}
+  .panel-card img{width:34px;height:34px;}
+}
+
 </style>
 </head>
 <body>
@@ -191,6 +239,7 @@ html,body{cursor:none}
 
   <div class="panel-bottom" id="panelBottom" style="display:none"></div>
 </div>
+
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbxGQdwKcNbsvJn4IyxMaMEpLEccUQZcSAJUw_mCFLvu7mDJ8yWDfTVYvuVDQZuy2eSX/exec";
